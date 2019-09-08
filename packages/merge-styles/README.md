@@ -1,4 +1,4 @@
-# [merge-styles](http://dev.office.com/fabric)
+# @uifabric/merge-styles
 
 The `merge-styles` library provides utilities for loading styles through javascript. It is designed to make it simple to style components through javascript. It generates css classes, rather than using inline styling, to ensure we can use css features like pseudo selectors (:hover) and parent/child selectors (media queries).
 
@@ -87,7 +87,7 @@ let style = {
 };
 ```
 
-A **style set** represents a map of area to style object. When building a component, you need to generate a class name for each element that requires styling. You would defint this in a **style set**.
+A **style set** represents a map of area to style object. When building a component, you need to generate a class name for each element that requires styling. You would define this in a **style set**.
 
 ```tsx
 let styleSet = {
@@ -114,12 +114,11 @@ export interface IComponentClassNames {
 export const getClassNames = (): IComponentClassNames => {
   return mergeStyleSets({
     root: {
-        background: 'red'
-      }
-    ),
+      background: 'red'
+    },
 
     button: {
-      backgroundColor: 'green',
+      backgroundColor: 'green'
     },
 
     buttonIcon: {
@@ -291,10 +290,7 @@ const classNames = {
 };
 
 mergeStyleSets({
-  root: [
-    classNames.root,
-    { background: 'lightgreen' }
-  ],
+  root: [classNames.root, { background: 'lightgreen' }],
 
   child: [
     classNames.child,
@@ -441,6 +437,20 @@ export const getClassNames = () => {
   });
 };
 ```
+
+## Controlling where styles are injected
+
+By default `merge-styles` will initially inject a `style` element into the document head as the first node and then append and new `style` elements as next sibling to the previous one added.
+
+In some cases you may want to control where styles are injected to ensure some stylesheets are more specific than others. To do this, you can add a placeholder `style` element in the head with `data-merge-styles` attribute:
+
+```html
+<head>
+  <style data-merge-styles></style>
+</head>
+```
+
+Merge styles will ensure that any generated styles are added after the placeholder.
 
 ## Server-side rendering
 

@@ -2,7 +2,7 @@ require('es6-promise/auto');
 
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { Router, Route } from 'office-ui-fabric-react/lib/utilities/router/index';
+import { Router, Route, IRouteProps } from '@uifabric/example-app-base';
 import { setBaseUrl } from 'office-ui-fabric-react/lib/Utilities';
 import { Fabric } from 'office-ui-fabric-react/lib/Fabric';
 
@@ -23,15 +23,16 @@ function _onLoad(): void {
 
 function _getRoutes(): JSX.Element[] {
   return require('./pages/pageList')
-    .map((page: string) => {
-      return {
-        component: (require(`./pages/${page}`) as any).default,
-        key: page,
-        name: page,
-        url: `#/${page}`
-      };
-    })
-    .map((page: any) => <Route key={page.key} path={page.url} component={page.component} />);
+    .map(
+      (page: string): IRouteProps => {
+        return {
+          component: require(`./pages/${page}`).default,
+          key: page,
+          path: `#/${page}`
+        };
+      }
+    )
+    .map((page: IRouteProps) => <Route key={page.key} {...page} />);
 }
 
 function _onUnload(): void {
